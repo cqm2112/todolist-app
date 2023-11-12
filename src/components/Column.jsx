@@ -1,19 +1,9 @@
 import { SortableContext, useSortable } from "@dnd-kit/sortable";
-import { Column, Id, Task } from "../types";
 import { CSS } from "@dnd-kit/utilities";
 import { useMemo, useState } from "react";
 import PlusIcon from "../icons/PlusIcon";
 import TaskCard from "./Card";
 
-interface Props {
-  column: Column;
-  updateColumn: (id: Id, title: string) => void;
-
-  createTask: (columnId: Id) => void;
-  updateTask: (id: Id, content: string) => void;
-  deleteTask: (id: Id) => void;
-  tasks: Task[];
-}
 
 function ColumnContainer({
   column,
@@ -22,7 +12,7 @@ function ColumnContainer({
   tasks,
   deleteTask,
   updateTask,
-}: Props) {
+}) {
   const [editMode, setEditMode] = useState(false);
 
   const tasksIds = useMemo(() => {

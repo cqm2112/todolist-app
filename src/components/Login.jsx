@@ -1,11 +1,10 @@
 import { useState } from "react";
 import LogoTmk from '../assets/logo-tmk-original.png';
 import Swal from "sweetalert2";
-// @ts-expect-error ...
 import { ApiUrl } from '../../global';
 import { useAuth } from "../authContext";
 
-const Login: React.FC = () => {
+const Login = () => {
     const [userLogin, setUserLogin] = useState('');
     const { setToken } = useAuth();
     const AuthVal = async () => {
@@ -30,7 +29,7 @@ const Login: React.FC = () => {
             console.error('Error fetching data from API:', error);
         }
     };
-    const RegisterVal = async (newToken: string) => {
+    const RegisterVal = async (newToken) => {
         try {
             const response = await fetch(ApiUrl,
                 {

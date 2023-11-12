@@ -1,12 +1,10 @@
 import { useEffect, useMemo, useState } from "react";
-import { Column, Id, Task } from "../types";
 import ColumnContainer from "./Column";
 import {
   DndContext,
-  DragEndEvent,
-  DragOverEvent,
+
   DragOverlay,
-  DragStartEvent,
+
   PointerSensor,
   useSensor,
   useSensors,
@@ -15,13 +13,11 @@ import { SortableContext, arrayMove } from "@dnd-kit/sortable";
 import { createPortal } from "react-dom";
 import Card from "./Card";
 import Swal from "sweetalert2";
-// @ts-expect-error ...
 import CreateTask from "./CreateTaskModal";
-// @ts-expect-error ...
 import { ApiUrl } from '../../global';
 import { useAuth } from "../authContext";
 
-const defaultCols: Column[] = [
+const defaultCols = [
   {
     id: 0,
     title: "Todo",
@@ -33,17 +29,17 @@ const defaultCols: Column[] = [
 ];
 
 function Board() {
-  const [columns, setColumns] = useState<Column[]>(defaultCols);
+  const [columns, setColumns] = useState(defaultCols);
   const [modalShow, setModalShow] = useState(false);
   const columnsId = useMemo(() => columns.map((col) => col.id), [columns]);
-  const [tasks, setTasks] = useState<Task[]>([]);
+  const [tasks, setTasks] = useState([]);
   const { token } = useAuth();
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await fetch(ApiUrl,
           {
-            // @ts-expect-error ...
+            
             headers: {
               'UserKey': token,
             }
@@ -68,9 +64,9 @@ function Board() {
     fetchData();
   }, [token]);
 
-  const [activeColumn, setActiveColumn] = useState<Column | null>(null);
+  const [activeColumn, setActiveColumn] = useState(null);
 
-  const [activeTask, setActiveTask] = useState<Task | null>(null);
+  const [activeTask, setActiveTask] = useState(null);
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -155,7 +151,7 @@ function Board() {
 
   }
 
-  async function deleteTask(id: Id) {
+  async function deleteTask(id) {
 
 
 
@@ -173,7 +169,7 @@ function Board() {
 
         const response = await fetch(`${ApiUrl}/${id}`, {
           method: 'DELETE',
-          // @ts-expect-error fff
+          
           headers: {
             'Content-Type': 'application/json',
             'UserKey': token,
@@ -198,7 +194,7 @@ function Board() {
 
   }
 
-  function updateTask(id: Id, content: string) {
+  function updateTask(id, content) {
     alert("hola")
     const newTasks = tasks.map((task) => {
       if (task.id !== id) return task;
@@ -209,7 +205,7 @@ function Board() {
   }
 
 
-  function updateColumn(id: Id, title: string) {
+  function updateColumn(id, title) {
     const newColumns = columns.map((col) => {
       if (col.id !== id) return col;
       return { ...col, title };
@@ -218,7 +214,7 @@ function Board() {
     setColumns(newColumns);
   }
 
-  function onDragStart(event: DragStartEvent) {
+  function onDragStart(event) {
 
     if (event.active.data.current?.type === "Task") {
 
@@ -227,7 +223,7 @@ function Board() {
     }
   }
 
-  async function onDragEnd(event: DragEndEvent) {
+  async function onDragEnd(event) {
     console.log(event)
     if (event.active.data.current != undefined) {
       const postData = {
@@ -239,7 +235,7 @@ function Board() {
       }
       await fetch(`${ApiUrl}/${postData.id}`, {
         method: 'PUT',
-        // @ts-expect-error fff
+        
         headers: {
           'Content-Type': 'application/json',
           'UserKey': token,
@@ -273,7 +269,7 @@ function Board() {
     });
   }
 
-  function onDragOver(event: DragOverEvent) {
+  function onDragOver(event) {
     const { active, over } = event;
     if (!over) return;
 
@@ -287,14 +283,13 @@ function Board() {
 
     if (!isActiveATask) return;
 
-    // Im dropping a Task over another Task
+   
     if (isActiveATask && isOverATask) {
       setTasks((tasks) => {
         const activeIndex = tasks.findIndex((t) => t.id === activeId);
         const overIndex = tasks.findIndex((t) => t.id === overId);
 
         if (tasks[activeIndex].status != tasks[overIndex].status) {
-          // Fix introduced after video recording
           tasks[activeIndex].status = tasks[overIndex].status;
           return arrayMove(tasks, activeIndex, overIndex - 1);
         }
@@ -305,7 +300,6 @@ function Board() {
 
     const isOverAColumn = over.data.current?.type === "Column";
 
-    // Im dropping a Task over a column
     if (isActiveATask && isOverAColumn) {
       setTasks((tasks) => {
         const activeIndex = tasks.findIndex((t) => t.id === activeId);

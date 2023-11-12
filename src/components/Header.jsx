@@ -3,7 +3,7 @@ import LogoTmk from '../assets/logo-tmk.png';
 import Profile from '../assets/user-profile.png';
 import Menu from './Menu';
 
-const Header: React.FC = () => {
+const Header = () => {
   const [modalShow, setModalShow] = useState(false);
   return (
     <header className={styles.header}>

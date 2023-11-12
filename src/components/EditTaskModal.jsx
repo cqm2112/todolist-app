@@ -3,14 +3,12 @@ import { Button, Form } from 'react-bootstrap';
 import { useState } from "react";
 import Swal from "sweetalert2";
 import 'bootstrap/dist/css/bootstrap.min.css';
-// @ts-expect-error ...
 import { ApiUrl } from '../../global';
 import { useAuth } from "../authContext";
-// @ts-expect-error ...
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 
-// @ts-expect-error fff
+
 
 function EditTask(props) {
   console.log(props)
@@ -20,7 +18,6 @@ function EditTask(props) {
   const [validated, setValidated] = useState(false);
   const [selectedDate, setSelectedDate] = useState(new Date(props.task.dueDate));
   const { token } = useAuth();
-  // @ts-expect-error fff
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -29,7 +26,7 @@ function EditTask(props) {
 
       if (form.checkValidity() === false) {
         e.stopPropagation();
-        setValidated(true); // Setear la validación a true si el formulario es inválido
+        setValidated(true); 
       } else {
 
         const postData = {
@@ -43,7 +40,6 @@ function EditTask(props) {
 
         const response = await fetch(`${ApiUrl}/${props.task.id}`, {
           method: "PUT",
-          // @ts-expect-error fff
           headers: {
             "Content-Type": "application/json",
             UserKey: token,
@@ -103,9 +99,8 @@ function EditTask(props) {
             <Form.Label>Vencimiento-opcional:</Form.Label>
             <DatePicker
               selected={selectedDate}
-              // @ts-expect-error fff
+        
               onChange={(date) => setSelectedDate(date)}
-              // Limita las fechas disponibles desde hoy en adelante
               className="form-control"
               noValidate
               placeholderText="Selecciona un fecha de vencimiento para esta tarea"

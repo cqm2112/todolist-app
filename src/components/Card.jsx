@@ -1,18 +1,13 @@
 import { useState } from "react";
 import TrashIcon from "../icons/trash-icon.png";
-import { Id, Task } from "../types";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import EditTask from "./EditTaskModal";
 
 
-interface Props {
-  task: Task;
-  deleteTask: (id: Id) => void;
-  updateTask: (id: Id, content: string) => void;
-}
 
-function Card({ task, deleteTask }: Props) {
+
+function Card({ task, deleteTask }) {
   const [mouseIsOver, setMouseIsOver] = useState(false);
   const [editMode, setEditMode] = useState(false);
   const [modalEditShow, setModalEditShow] = useState(false);

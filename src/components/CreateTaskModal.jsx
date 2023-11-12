@@ -22,7 +22,7 @@ function CreateTask(props) {
     e.preventDefault();
     e.stopPropagation();
   } else {
-    e.preventDefault(); // Evita que el formulario se envíe antes de ejecutar la lógica personalizada
+    e.preventDefault(); 
    var date = new Date()
     const postData = {
       title: title,
@@ -91,7 +91,6 @@ function CreateTask(props) {
       <DatePicker
             selected={selectedDate}
             onChange={(date) => setSelectedDate(date)}
-            // Limita las fechas disponibles desde hoy en adelante
             className="form-control"
             noValidate
             placeholderText="Selecciona un fecha de vencimiento para esta tarea"
