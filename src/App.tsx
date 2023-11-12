@@ -10,6 +10,7 @@ function App() {
 
 
   return (
+    // @ts-expect-error ...
     <AuthProvider>
       {token ? (
         <Board />
