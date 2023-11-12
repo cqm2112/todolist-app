@@ -4,37 +4,53 @@ import {  useState } from "react";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { ApiUrl } from '../../global';
 import { useAuth } from "../authContext";
+import Swal from "sweetalert2";
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 function CreateTask(props) {
  const [title, setTitle] = useState("");
  const [description, setDescription] = useState("");
  const [status, setStatus] = useState("0");
  const [validated, setValidated] = useState(false);
+ const [selectedDate, setSelectedDate] = useState(null);
  
  const { token } = useAuth();
-  const handleSubmit= async (e) => { 
-      e.preventDefault();
-    const form = e.currentTarget;
-    if (form.checkValidity() === false) {
-      e.stopPropagation();
-    }
+ const handleSubmit = async (e) => {
+  const form = e.currentTarget;
 
+  if (form.checkValidity() === false) {
+    e.preventDefault();
+    e.stopPropagation();
+  } else {
+    e.preventDefault(); // Evita que el formulario se envíe antes de ejecutar la lógica personalizada
+   var date = new Date()
     const postData = {
-        title: title,
-        description: description,
-        createdDate: "2023-11-11T20:25:54.157Z",
-        status: Number(status)
-    }
-    await fetch(ApiUrl, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'UserKey': token,
-        },
-        body: JSON.stringify(postData),
-      });
+      title: title,
+      description: description,
+      createdDate: date.toISOString(),
+      dueDate: selectedDate,
+      status: Number(status),
+    };
+
+    var response = await fetch(ApiUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        UserKey: token,
+      },
+      body: JSON.stringify(postData),
+    });
+
+    if (response.ok) {
       window.location.reload();
-    setValidated(true);
-      }
+    } else {
+      Swal.fire("Error inesperado", "intente más tarde", "error");
+    }
+  }
+
+  setValidated(true);
+};
+
     return (
         <Modal
             {...props}
@@ -69,6 +85,18 @@ function CreateTask(props) {
       <option value="0">Pendiente</option>
       <option value="1">Lista</option>
     </Form.Select>
+      </Form.Group>
+      <Form.Group className="mb-3 flex flex-col w-full" noValidate >
+      <Form.Label>Vencimiento-opcional:</Form.Label>
+      <DatePicker
+            selected={selectedDate}
+            onChange={(date) => setSelectedDate(date)}
+            // Limita las fechas disponibles desde hoy en adelante
+            className="form-control"
+            noValidate
+            placeholderText="Selecciona un fecha de vencimiento para esta tarea"
+          />
+
       </Form.Group>
             </Modal.Body>
             <Modal.Footer>

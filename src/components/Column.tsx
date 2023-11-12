@@ -7,7 +7,6 @@ import TaskCard from "./Card";
 
 interface Props {
   column: Column;
-  deleteColumn: (id: Id) => void;
   updateColumn: (id: Id, title: string) => void;
 
   createTask: (columnId: Id) => void;
@@ -86,7 +85,7 @@ function ColumnContainer({
   flex-col
   "
     >
-      {/* Column title */}
+
       <div
         {...attributes}
         {...listeners}
@@ -141,10 +140,11 @@ function ColumnContainer({
         </div>
       </div>
 
-      {/* Column task container */}
+
       <div className="flex flex-grow flex-col gap-4 p-2 overflow-x-hidden overflow-y-auto">
         <SortableContext items={tasksIds}>
           {tasks.map((task) => (
+
             <TaskCard
               key={task.id}
               task={task}
@@ -154,7 +154,7 @@ function ColumnContainer({
           ))}
         </SortableContext>
       </div>
-      {/* Column footer */}
+
       <button
         hidden={column.id == 1}
         className="flex gap-2 items-center text-black border-columnBackgroundColor border-2 rounded-md p-4 border-x-columnBackgroundColor hover:bg-mainBackgroundColor hover:text-rose-500 active:bg-black"

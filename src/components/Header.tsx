@@ -9,7 +9,7 @@ const Header: React.FC = () => {
     <header className={styles.header}>
       <img className={styles.img} src={LogoTmk} alt="Logo" />
       <div className={styles.rightSection}>
-        {/* Aquí puedes añadir más elementos a la derecha del logo si es necesario */}
+
         <button className={styles.button} onClick={() => setModalShow(true)} id='MenuButton'><img className="w-8" src={Profile} alt="Logo" /></button>
       </div>
       <Menu show={modalShow} onHide={() => setModalShow(false)}></Menu>
@@ -20,8 +20,8 @@ const Header: React.FC = () => {
 const styles = {
   header: 'sticky top-0 h-24 bg-white flex justify-between items-center z-10 p-4',
   img: 'w-96',
-  rightSection: 'flex items-center', // Contenedor para los elementos a la derecha
-  button: 'ml-auto text-white p-2 rounded-md hover:bg-blue-600', // Estilos del botón
+  rightSection: 'flex items-center',
+  button: 'ml-auto text-white p-2 rounded-md hover:bg-blue-600',
 };
 
 export default Header;

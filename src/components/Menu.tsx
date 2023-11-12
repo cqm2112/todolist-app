@@ -1,10 +1,9 @@
 import Modal from 'react-bootstrap/Modal';
 import { Button, ListGroup } from 'react-bootstrap';
-import { useState } from "react";
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useAuth } from "../authContext";
 
-
+// @ts-expect-error props
 
 function Menu(props) {
     const { token, setToken } = useAuth();

@@ -1,10 +1,10 @@
 import { useState } from "react";
-import TrashIcon from "../icons/TrashIcon";
+import TrashIcon from "../icons/trash-icon.png";
 import { Id, Task } from "../types";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 import EditTask from "./EditTaskModal";
-import { ApiUrl } from '../../global';
+
 
 interface Props {
   task: Task;
@@ -12,10 +12,14 @@ interface Props {
   updateTask: (id: Id, content: string) => void;
 }
 
-function Card({ task, deleteTask, updateTask }: Props) {
+function Card({ task, deleteTask }: Props) {
   const [mouseIsOver, setMouseIsOver] = useState(false);
   const [editMode, setEditMode] = useState(false);
-  const [modalShow, setModalShow] = useState(false);
+  const [modalEditShow, setModalEditShow] = useState(false);
+  const [isDelitingTask, setIsDelitingTask] = useState(false)
+
+
+
 
   const {
     setNodeRef,
@@ -39,9 +43,10 @@ function Card({ task, deleteTask, updateTask }: Props) {
   };
 
   const toggleEditMode = () => {
-    if (!isDragging) {
 
+    if (!isDelitingTask && !modalEditShow) {
       setEditMode(true)
+      setModalEditShow(true)
     }
   };
 
@@ -59,11 +64,7 @@ function Card({ task, deleteTask, updateTask }: Props) {
     );
   }
 
-  if (editMode) {
-    return (
-      <EditTask show={true} onHide={() => setModalShow(false)} task={task} />
-    );
-  }
+
 
   return (
     <div
@@ -72,7 +73,7 @@ function Card({ task, deleteTask, updateTask }: Props) {
       {...attributes}
       {...listeners}
       onClick={toggleEditMode}
-      className="bg-mainBackgroundColor p-2.5 h-[100px] min-h-[100px] items-center flex text-left rounded-xl hover:ring-2 hover:ring-inset hover:ring-secondaryBackgroundColor cursor-grab relative task"
+      className={`${new Date(task.dueDate) < new Date() && task.status == 0 ? "bg-red-600" : "bg-mainBackgroundColor"} p-2.5 h-[100px]  min-h-[100px] items-center flex flex-col text-left rounded-xl hover:ring-2 hover:ring-inset hover:ring-secondaryBackgroundColor cursor-grab relative task`}
       onMouseEnter={() => {
         setMouseIsOver(true);
       }}
@@ -80,19 +81,38 @@ function Card({ task, deleteTask, updateTask }: Props) {
         setMouseIsOver(false);
       }}
     >
-      <p className="my-auto h-[90%] w-full overflow-y-auto overflow-x-hidden whitespace-pre-wrap">
-        {task.description}
-      </p>
+      <div className="w-full border-b-2  flex flex-row justify-between solid border-secondaryBackgroundColor ">
+        <h6 className="text-xs">
+          {task.title}
+        </h6>
+        <h6 className="text-xs">{new Date(task.createdDate).toLocaleDateString('es-ES')} - {new Date(task.dueDate).toLocaleDateString('es-ES')}</h6>
+      </div>
+      <div className="p-2">
+
+        <textarea className="bg-transparent resize-none " rows={2} cols={35} readOnly value={task.description} />
+      </div>
 
       {mouseIsOver && (
+
         <button
+          onMouseOver={() => {
+            setIsDelitingTask(true);
+          }}
+          onMouseLeave={() => {
+            setIsDelitingTask(false);
+          }}
           onClick={() => {
             deleteTask(task.id);
+            setIsDelitingTask(false);
           }}
-          className="stroke-white absolute right-4 top-1/2 -translate-y-1/2 bg-columnBackgroundColor p-2 rounded opacity-60 hover:opacity-100"
+          className="stroke-white absolute z-10 right-2 top-20 -translate-y-1/2 bg-columnBackgroundColor p-2 rounded opacity-60 hover:opacity-100"
         >
-          <TrashIcon />
+          <img src={TrashIcon} className="w-4" />
         </button>
+      )
+      }
+      {modalEditShow && (
+        <EditTask show={modalEditShow} onHide={() => setModalEditShow(false)} task={task} />
       )}
 
     </div>

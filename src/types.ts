@@ -10,13 +10,12 @@ export type Task = {
   title: string;
   description: string;
   createdDate: string;
+  dueDate: string;
   status: Id;
+  isDueDatePassed: boolean;
 };
 
-export type GetResponse = {
-  id: Id;
-  title: string;
-  description: string;
-  createdDate: string;
-  status: Id;
+export type Headers = {
+  UserKey: string;
+  "Content-Type": "application/json"
 };

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import LogoTmk from '../assets/logo-tmk-original.png';
 import Swal from "sweetalert2";
+// @ts-expect-error ...
 import { ApiUrl } from '../../global';
 import { useAuth } from "../authContext";
 
@@ -68,7 +69,7 @@ const Login: React.FC = () => {
         Swal.fire({
             title: "Creando codigo de acceso",
             html: "Con Este codigo podras acceder a tus notas desde cualquier parte del mundo. Siempre podras ver tu codigo desde el menu.",
-            timer: 10000,
+            timer: 5000,
             timerProgressBar: true,
             allowOutsideClick: false,
             didOpen: () => {
@@ -86,7 +87,7 @@ const Login: React.FC = () => {
     };
 
     const LoginCodeGenerator = async () => {
-        const caracteres = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#$%^&*()_+[]{}|;:,.<>?';
+        const caracteres = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#';
         const longitudCodigo = 6;
 
         let NewUserCode = '';

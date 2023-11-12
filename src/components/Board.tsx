@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { Column, GetResponse, Id, Task } from "../types";
+import { Column, Id, Task } from "../types";
 import ColumnContainer from "./Column";
 import {
   DndContext,
@@ -15,7 +15,9 @@ import { SortableContext, arrayMove } from "@dnd-kit/sortable";
 import { createPortal } from "react-dom";
 import Card from "./Card";
 import Swal from "sweetalert2";
+// @ts-expect-error ...
 import CreateTask from "./CreateTaskModal";
+// @ts-expect-error ...
 import { ApiUrl } from '../../global';
 import { useAuth } from "../authContext";
 
@@ -35,32 +37,36 @@ function Board() {
   const [modalShow, setModalShow] = useState(false);
   const columnsId = useMemo(() => columns.map((col) => col.id), [columns]);
   const [tasks, setTasks] = useState<Task[]>([]);
-  const [taskOnEdit, settaskOnEdit] = useState<Task>();
   const { token } = useAuth();
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await fetch(ApiUrl,
           {
+            // @ts-expect-error ...
             headers: {
               'UserKey': token,
             }
           })
+        if (response.ok) {
 
-        const data = await response.json();
-        if (data.length === 0) {
-          Swal.fire("Informacion", `Con el código ${token} podrás acceder a tus notas desde cualquier parte del mundo. Siempre podrás visualizar tu código desde el menú. Si al cerrar sesión no tienes tareas registradas, la cuenta se eliminará automáticamente.`, "info");
+          const data = await response.json();
+          if (data.length === 0) {
+            Swal.fire("Informacion", `Con el código ${token} podrás acceder a tus notas desde cualquier parte del mundo. Siempre podrás visualizar tu código desde el menú. Si al cerrar sesión no tienes tareas registradas, la cuenta se eliminará automáticamente.`, "info");
+          }
+
+
+          setTasks(data);
+        } else {
+          Swal.fire("Error inesperado", "intente mas tarde o recarga la pagina", "error");
         }
-
-
-        setTasks(data);
       } catch (error) {
         console.error('Error fetching data from API:', error);
       }
     };
 
     fetchData();
-  }, []);
+  }, [token]);
 
   const [activeColumn, setActiveColumn] = useState<Column | null>(null);
 
@@ -138,8 +144,7 @@ function Board() {
           document.body
         )}
       </DndContext>
-      {/* <CreateTask show={modalShow} onHide={() => setModalShow(false)} /> */}
-      <CreateTask show={modalShow} onHide={() => setModalShow(false)} Task={taskOnEdit} />
+      <CreateTask show={modalShow} onHide={() => setModalShow(false)} />
     </div>
 
   );
@@ -152,7 +157,7 @@ function Board() {
 
   async function deleteTask(id: Id) {
 
-    const newTasks = tasks.filter((task) => task.id !== id);
+
 
     Swal.fire({
       title: "Estas seguro?",
@@ -166,20 +171,28 @@ function Board() {
     }).then(async (result) => {
       if (result.isConfirmed) {
 
-        await fetch(`${ApiUrl}/${id}`, {
+        const response = await fetch(`${ApiUrl}/${id}`, {
           method: 'DELETE',
+          // @ts-expect-error fff
           headers: {
             'Content-Type': 'application/json',
             'UserKey': token,
           },
 
+
         });
-        setTasks(newTasks);
-        Swal.fire({
-          title: "Deleted!",
-          text: "Your file has been deleted.",
-          icon: "success"
-        });
+        if (response.ok) {
+          const newTasks = tasks.filter((task) => task.id !== id);
+          setTasks(newTasks);
+          Swal.fire({
+            title: "Deleted!",
+            text: "Your file has been deleted.",
+            icon: "success"
+          });
+        } else {
+          Swal.fire("Error inesperado", "intente mas tarde", "error");
+        }
+
       }
     });
 
@@ -206,10 +219,6 @@ function Board() {
   }
 
   function onDragStart(event: DragStartEvent) {
-    if (event.active.data.current?.type === "Column") {
-      setActiveColumn(event.active.data.current.column);
-      return;
-    }
 
     if (event.active.data.current?.type === "Task") {
 
@@ -230,6 +239,7 @@ function Board() {
       }
       await fetch(`${ApiUrl}/${postData.id}`, {
         method: 'PUT',
+        // @ts-expect-error fff
         headers: {
           'Content-Type': 'application/json',
           'UserKey': token,
