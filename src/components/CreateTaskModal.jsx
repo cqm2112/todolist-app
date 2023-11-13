@@ -30,7 +30,7 @@ function CreateTask(props) {
       title: title,
       description: description,
       createdDate: date.toISOString(),
-      dueDate: selectedDate,
+      dueDate: selectedDate ?? date,
       status: Number(status),
     };
 
