@@ -13,7 +13,7 @@ export default {
         "CurtainColor": '#325790eb'
       },
       backgroundImage: {
-        'tmk-back': "url('tmk-back.png')",
+        'tmk-back': "url('assets/tmk-back.png')",
 
       }
     },
