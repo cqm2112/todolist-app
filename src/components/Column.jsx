@@ -96,21 +96,7 @@ function ColumnContainer({
       "
       >
         <div className="flex gap-2">
-          <div
-            className="
-        flex
-        justify-center
-        items-center
-        bg-columnBackgroundColor
-        px-2
-        py-1
-        text-black
-        text-sm
-        rounded-full
-        "
-          >
-            0
-          </div>
+
           {!editMode && column.title}
           {editMode && (
             <input

@@ -17,6 +17,7 @@ function EditTask(props) {
   const [status, setStatus] = useState(props.task.status);
   const [validated, setValidated] = useState(false);
   const [selectedDate, setSelectedDate] = useState(new Date(props.task.dueDate));
+  const [isDisabledButton, setIsDisabledButton ] = useState(false)
   const { token } = useAuth();
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -28,7 +29,7 @@ function EditTask(props) {
         e.stopPropagation();
         setValidated(true); 
       } else {
-
+        setIsDisabledButton(true);
         const postData = {
           id: props.task.id,
           title: title,
@@ -51,6 +52,7 @@ function EditTask(props) {
           window.location.reload();
         } else {
           Swal.fire("Error inesperado", "intente más tarde", "error");
+          setIsDisabledButton(false);
         }
       }
     } catch (error) {
@@ -110,7 +112,7 @@ function EditTask(props) {
         </Modal.Body>
         <Modal.Footer>
           <Button onClick={props.onHide}>Close</Button>
-          <Button type='submit'>Crear</Button>
+          <Button type='submit' disabled={isDisabledButton}>Editar</Button>
         </Modal.Footer>
       </Form>
     </Modal>

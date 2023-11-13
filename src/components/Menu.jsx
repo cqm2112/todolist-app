@@ -69,7 +69,6 @@ function Menu(props) {
                         <ListGroup.Item className='font-bold'> <label>Codigo Fuente Front: <a href={FrontGitHub} target='_Blank'> Aqui</a> </label></ListGroup.Item>
                         <ListGroup.Item className='font-bold'> <label>Codigo Fuente Api: <a href={ApiGitHub} target='_Blank'> Aqui</a> </label></ListGroup.Item>
                         <ListGroup.Item className='font-bold'> <label>Valorar prueba tecnica <a href={UrlEncuesta} target='_Blank'> Aqui</a> </label></ListGroup.Item>
-
                         <ListGroup.Item className='font-bold'> <label>Telemedik: <a  href={TelemedikLink}  target='_Blank'> Aqui</a> </label></ListGroup.Item>
                     </ListGroup>
                 </Modal.Body>

@@ -13,6 +13,7 @@ function CreateTask(props) {
  const [status, setStatus] = useState("0");
  const [validated, setValidated] = useState(false);
  const [selectedDate, setSelectedDate] = useState(null);
+ const [isDisabledButton, setIsDisabledButton ] = useState(false)
  
  const { token } = useAuth();
  const handleSubmit = async (e) => {
@@ -23,6 +24,7 @@ function CreateTask(props) {
     e.stopPropagation();
   } else {
     e.preventDefault(); 
+    setIsDisabledButton(true);
    var date = new Date()
     const postData = {
       title: title,
@@ -45,6 +47,7 @@ function CreateTask(props) {
       window.location.reload();
     } else {
       Swal.fire("Error inesperado", "intente más tarde", "error");
+      setIsDisabledButton(false);
     }
   }
 
@@ -100,7 +103,7 @@ function CreateTask(props) {
             </Modal.Body>
             <Modal.Footer>
                 <Button onClick={props.onHide}>Close</Button>
-                <Button type='submit'>Crear</Button>
+                <Button type='submit' disabled={isDisabledButton}>Crear</Button>
             </Modal.Footer>
     </Form>
         </Modal>
